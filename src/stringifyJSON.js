@@ -6,7 +6,6 @@
 
 var stringifyJSON = function(input) {
   var result = '';
-  // handle non-objects
   
   if (input === null) {
     result += 'null';
@@ -33,7 +32,25 @@ var stringifyJSON = function(input) {
     }
     
     result += arrayResult + "]";
-    // use recursion here
+    return result;
+  } else { // if obj and not array
+    var objResult = "{";
+    var trailingComma = false;
+
+    for (var j in input) {
+      if ((typeof input[j] !== 'function') && (input[j] !== undefined)) {
+        trailingComma = true;
+        objResult += '"' + j + '":' + stringifyJSON(input[j]) + ",";
+      }
+    }
+
+    if (trailingComma) {
+      objResult = objResult.slice(0, objResult.length-1);
+    }
+
+    result += objResult + "}";
+    return result;
+
   }
 
 
@@ -41,9 +58,3 @@ var stringifyJSON = function(input) {
 };
 
 // typeof null returns object
-
-
-
-/*
-if input is array, 
-*/
